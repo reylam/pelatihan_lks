@@ -37,4 +37,26 @@ class AuthController extends Controller
             "token" => $token,
         ], 201);
     }
+
+    public function login(Request $request){
+        $auth = Auth::attempt([
+            "email" => $request->email,
+            "password" => $request->password
+        ]);  // Hasil nya bakal true or false
+
+        if(!$auth){
+            return response()->json([
+                "message" => "email or password incorrect!" //email atau password salah
+            ],401);
+        } // false -> true, true -> false
+
+        $user = Auth::user(); //user login
+        $token = $user->createToken("token")->plainTextToken; // membuat token
+
+        return response()->json([
+            "message" => "Login Sucessfull",
+            "user" => $user, // mengambil data user
+            "token" => $token // mengambil token
+        ]);
+    }
 }
