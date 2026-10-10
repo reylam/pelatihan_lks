@@ -25,3 +25,4 @@ Route::get("/me", [AuthController::class, "me"])->middleware("auth:sanctum");
 Route::post("/category", [CategoryController::class, "store"])->middleware("auth:sanctum");
 Route::get("/category", [CategoryController::class, "index"]);
 Route::get("/category/{id}", [CategoryController::class, "show"]);
+Route::patch("/category/{id}", [CategoryController::class, "update"])->middleware("auth:sanctum");

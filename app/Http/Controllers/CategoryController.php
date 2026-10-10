@@ -13,7 +13,7 @@ class CategoryController extends Controller
         $user = Auth::user();
 
         $validator = Validator::make($request->all(), [
-            "name" => "min:3|unique:categories,name",
+            "name" => "required|min:3|unique:categories,name",
         ]);
 
         if ($validator->fails()) {
@@ -40,6 +40,57 @@ class CategoryController extends Controller
         return response()->json([
             "message" => "Get All Category Successfully",
             "categories" => $category
+        ]);
+    }
+
+    public function show($id){
+        $category = Category::find($id);
+
+        if($category == NULL){
+            return response()->json([
+                "message" => "Get Category by id not found!"
+            ],404);
+        }
+
+        return response()->json([
+            "message" => "Get Category by id Successfuly!",
+            "category" => $category
+        ]);
+    }
+
+    public function update($id, Request $request){
+        $category = Category::find($id);
+
+        if($category == NULL){ // kalau categorynya not found
+            return response()->json([
+                "message" => "Get Category by id not found!"
+            ],404);
+        }
+
+        if($category->user_id != Auth::user()->id){ // validasi membandingkan category yang kita ambil berdasarkan user jika berbeda dengan user yang login
+            return response()->json([
+                "message" => "Cannot update category!"
+            ],401);
+        }
+
+        $validator = Validator::make($request->all(), [
+            "name" => "required|min:3|unique:categories,name",
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                "message" => "Validator Detected",
+                "errors" => $validator->errors()
+            ], 401);
+        }
+
+        $updateCategory = $category->update([
+            "name" => $request->name
+        ]);
+
+        return response()->json([
+            "message" => "Updated category by id successfully!",
+            "category" => $category
         ]);
     }
 }
