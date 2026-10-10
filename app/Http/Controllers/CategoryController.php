@@ -20,7 +20,7 @@ class CategoryController extends Controller
             return response()->json([
                 "message" => "Validator Detected",
                 "errors" => $validator->errors()
-            ], 400);
+            ], 401);
         }
 
         $category = Category::create([
@@ -31,6 +31,15 @@ class CategoryController extends Controller
         return response()->json([
             "message" => "Created Category Successful",
             "category" => $category
+        ]);
+    }
+
+    public function index(){
+        $category = Category::all();
+
+        return response()->json([
+            "message" => "Get All Category Successfully",
+            "categories" => $category
         ]);
     }
 }

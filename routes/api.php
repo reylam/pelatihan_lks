@@ -20,7 +20,8 @@ Route::get("/", function(){
 Route::post("/register", [AuthController::class, "register"]);
 Route::post("/login", [AuthController::class, "login"]);
 Route::post("/logout", [AuthController::class, "logout"])->middleware("auth:sanctum");
-
 Route::get("/me", [AuthController::class, "me"])->middleware("auth:sanctum");
-Route::post("/category", [CategoryController::class, "store"])->middleware("auth:sanctum");
 
+Route::post("/category", [CategoryController::class, "store"])->middleware("auth:sanctum");
+Route::get("/category", [CategoryController::class, "index"]);
+Route::get("/category/{id}", [CategoryController::class, "show"]);
