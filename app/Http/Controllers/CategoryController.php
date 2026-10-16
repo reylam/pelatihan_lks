@@ -93,4 +93,26 @@ class CategoryController extends Controller
             "category" => $category
         ]);
     }
+
+    public function destroy($id){
+        $category = Category::find($id);
+
+        if($category == NULL){ // kalau categorynya not found
+            return response()->json([
+                "message" => "Get Category by id not found!"
+            ],404);
+        }
+
+        if($category->user_id != Auth::user()->id){ // validasi membandingkan category yang kita ambil berdasarkan user jika berbeda dengan user yang login
+            return response()->json([
+                "message" => "Cannot update category!"
+            ],401);
+        }
+
+        $category->delete();
+
+        return response()->json([
+            "message" => "Delete category by successfully"
+        ]);
+    }
 }
